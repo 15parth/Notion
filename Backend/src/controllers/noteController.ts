@@ -1,49 +1,26 @@
+// src/controllers/note.controller.ts
 import { Request, Response } from 'express';
-import Note from '../models/Note';
+import * as noteService from '../services/note.services';
+import { createNoteSchema } from '../validators/note.validator';
 
-// Fetch all notes
-export const getNotes = async (req: Request, res: Response) => {
-  try {
-    const notes = await Note.find();
-    res.status(200).json(notes);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch notes' });
-  }
-};
-
-// Create a new note
 export const createNote = async (req: Request, res: Response) => {
   try {
-    const { title, content } = req.body;
+    const validated = createNoteSchema.parse(req.body); // ✅ validation
 
-    if (!title || !content) {
-      return res.status(400).json({ error: 'Title and content are required' });
-    }
-
-    const newNote = new Note({
-      title,
-      content,
-    });
-
-    const savedNote = await newNote.save();
-    res.status(201).json(savedNote);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to create note' });
+    const note = await noteService.createNote(validated.title, validated.content);
+    res.status(201).json(note);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
   }
 };
 
-// Delete a note
+export const getNotes = async (_req: Request, res: Response) => {
+  const notes = await noteService.getAllNotes();
+  res.status(200).json(notes);
+};
+
 export const deleteNote = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const note = await Note.findByIdAndDelete(id);
-
-    if (!note) {
-      return res.status(404).json({ error: 'Note not found' });
-    }
-
-    res.status(200).json({ message: 'Note deleted successfully' });
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to delete note' });
-  }
+  const id = req.params.id;
+  await noteService.deleteNote(id);
+  res.status(200).json({ message: 'Note deleted' });
 };

@@ -1,12 +1,11 @@
+// src/routes/note.route.ts
 import { Router } from 'express';
-import { getNotes, createNote, deleteNote } from '../controllers/noteController';
+import * as noteController from '../controllers/noteController';
 
 const router = Router();
 
-router.get('/pages', getNotes);
-
-router.post('/pages', createNote);
-
-router.delete('/pages/:id', deleteNote);
+router.get('/', noteController.getNotes);
+router.post('/', noteController.createNote);
+router.delete('/:id', noteController.deleteNote);
 
 export default router;
