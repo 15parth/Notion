@@ -14,11 +14,6 @@ app.use(express.json()); // to handle incoming JSON requests
 
 const MONGO_CONNECTION_STRING = process.env.MONGO_URI!;
 
-// Simple route to test server is working
-app.get("/", (req, res) => {
-  res.send("🚀 This is the Notion-like App backend!");
-});
-
 // API Routes for notes
 app.use("/api", noteRoutes);  // Note routes are now prefixed with `/api`
 

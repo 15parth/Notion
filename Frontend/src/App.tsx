@@ -24,8 +24,8 @@ function App() {
     api
       .get('/pages', { params: { page, limit: PAGE_SIZE } })
       .then((res) => {
-        setNotes(res.data.notes);
-        setTotal(res.data.total);
+        setNotes(res?.data?.data);
+        setTotal(res?.data?.totalNotes);
       })
       .catch(console.error);
   }, [page]);

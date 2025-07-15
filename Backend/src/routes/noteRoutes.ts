@@ -4,8 +4,8 @@ import * as noteController from '../controllers/noteController';
 
 const router = Router();
 
-router.get('/', noteController.getNotes);
-router.post('/', noteController.createNote);
-router.delete('/:id', noteController.deleteNote);
+router.get('/pages', noteController.getNotes);
+router.post('/pages', noteController.createNote);
+router.delete('/pages/:id', noteController.deleteNote);
 
 export default router;

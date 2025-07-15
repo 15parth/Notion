@@ -4,8 +4,8 @@ export const createNote = async (title: string, content: string) => {
   return await noteRepo.createNote({ title, content });
 };
 
-export const getAllNotes = async () => {
-  return await noteRepo.getAllNotes();
+export const getAllNotes = async (page: number, limit: number) => {
+  return await noteRepo.paginateNotes(page, limit);
 };
 
 export const deleteNote = async (id: string) => {
