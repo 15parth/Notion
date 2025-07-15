@@ -5,7 +5,7 @@ import { createNoteSchema } from '../validators/note.validator';
 
 export const createNote = async (req: Request, res: Response) => {
   try {
-    const validated = createNoteSchema.parse(req.body); // ✅ validation
+    const validated = createNoteSchema.parse(req.body); 
 
     const note = await noteService.createNote(validated.title, validated.content);
     res.status(201).json(note);
@@ -14,9 +14,16 @@ export const createNote = async (req: Request, res: Response) => {
   }
 };
 
-export const getNotes = async (_req: Request, res: Response) => {
-  const notes = await noteService.getAllNotes();
-  res.status(200).json(notes);
+export const getNotes = async (req: Request, res: Response) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+
+    const notes = await noteService.getAllNotes(page, limit);
+    res.status(200).json(notes);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || 'Server Error' });
+  }
 };
 
 export const deleteNote = async (req: Request, res: Response) => {
