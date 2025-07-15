@@ -2,11 +2,11 @@
 import { Request, Response } from 'express';
 import * as noteService from '../services/note.services';
 import { createNoteSchema } from '../validators/note.validator';
+import { listNotesQuerySchema } from '../validators/noteQuery.validator';
 
 export const createNote = async (req: Request, res: Response) => {
   try {
     const validated = createNoteSchema.parse(req.body); 
-
     const note = await noteService.createNote(validated.title, validated.content);
     res.status(201).json(note);
   } catch (err: any) {
@@ -16,10 +16,14 @@ export const createNote = async (req: Request, res: Response) => {
 
 export const getNotes = async (req: Request, res: Response) => {
   try {
-    const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 10;
+    const query = listNotesQuerySchema.parse(req.query);  // validate query params
+    const { search } = query;
 
-    const notes = await noteService.getAllNotes(page, limit);
+    // If search parameter is passed, use searchNotes, else return all notes
+    const notes = search 
+      ? await noteService.searchNotes(search, query.page, query.limit)
+      : await noteService.getAllNotes(query.page, query.limit);
+
     res.status(200).json(notes);
   } catch (err: any) {
     res.status(500).json({ error: err.message || 'Server Error' });
