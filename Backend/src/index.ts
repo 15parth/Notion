@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";  // Enable CORS for cross-origin requests
 import { connectDB } from "./utils/db";
 import noteRoutes from "./routes/noteRoutes";  // Import the note routes
+import { errorHandler } from "./utils/errors/errorhandler";
 
 dotenv.config();
 
@@ -16,6 +17,8 @@ const MONGO_CONNECTION_STRING = process.env.MONGO_URI!;
 
 // API Routes for notes
 app.use("/api", noteRoutes);  // Note routes are now prefixed with `/api`
+
+app.use(errorHandler);
 
 const startServer = async () => {
   try {

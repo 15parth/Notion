@@ -3,15 +3,20 @@ import { Request, Response } from 'express';
 import * as noteService from '../services/note.services';
 import { createNoteSchema } from '../validators/note.validator';
 import { listNotesQuerySchema } from '../validators/noteQuery.validator';
+import ValidationErrors from '../utils/errors/validationError';
 
-export const createNote = async (req: Request, res: Response) => {
-  try {
-    const validated = createNoteSchema.parse(req.body); 
-    const note = await noteService.createNote(validated.title, validated.content);
-    res.status(201).json(note);
-  } catch (err: any) {
-    res.status(400).json({ error: err.message });
-  }
+export const createNote = async (req: Request, res: Response, next: Function) => {
+const result = createNoteSchema.safeParse(req.body);
+
+if (!result.success) {
+  throw new ValidationErrors(result.error); // ✅ works correctly now
+}
+
+  // If validation passes, proceed with note creation logic
+  const { title, content } = result.data;
+  const note = await noteService.createNote(title, content);
+
+  res.status(201).json(note);
 };
 
 export const getNotes = async (req: Request, res: Response) => {
