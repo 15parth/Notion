@@ -76,7 +76,6 @@ const NotesPage: React.FC = () => {
       setNotes(notes?.filter((note) => note._id !== noteId));
     } catch (error) {
       console.error('Error deleting note:', error);
-      alert('Failed to delete note');
     }
   };
 
@@ -230,7 +229,7 @@ const NotesPage: React.FC = () => {
 
           {/* Notes List */}
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {filteredNotes.length === 0 ? (
+            {filteredNotes?.length === 0 ? (
               <div className="col-span-full text-center py-16">
                 <h3 className="text-xl font-semibold text-gray-500 mb-2">
                   {searchTerm ? 'No notes found' : 'No notes yet'}
@@ -242,7 +241,7 @@ const NotesPage: React.FC = () => {
                 </p>
               </div>
             ) : (
-              filteredNotes.map((note, index) => (
+              filteredNotes?.map((note, index) => (
                 <div
                   key={note._id}
                   className="group bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:bg-white/90 animate-fadeIn"
