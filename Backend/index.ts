@@ -1,21 +1,35 @@
-import express from "express";
 import dotenv from "dotenv";
-import cors from "cors";  // Enable CORS for cross-origin requests
-import { connectDB } from "./utils/db";
-import noteRoutes from "./routes/noteRoutes";  // Import the note routes
-
 dotenv.config();
+
+import express from "express";
+import cors from "cors";  // Enable CORS for cross-origin requests
+import { connectDB } from "./src/utils/db";
+import noteRoutes from "./src/routes/noteRoutes";  // Import the note routes
+import authRoutes from './src/routes/auth.routes';
+import { authenticate } from './src/middlewares/auth.middleware';
+import { errorHandler } from "./src/utils/errors/errorhandler";
+
+
+
+
 
 const app = express();
 
+// console.log("JWT_SECRET:------", process.env.JWT_SECRET);
 // Middleware to parse JSON and handle CORS
 app.use(cors());
 app.use(express.json()); // to handle incoming JSON requests
 
 const MONGO_CONNECTION_STRING = process.env.MONGO_URI!;
 
+app.use('/auth', authRoutes);
+
+
+
 // API Routes for notes
-app.use("/api", noteRoutes);  // Note routes are now prefixed with `/api`
+app.use("/api", authenticate, noteRoutes); 
+
+app.use(errorHandler);
 
 const startServer = async () => {
   try {

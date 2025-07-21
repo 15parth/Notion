@@ -1,18 +1,27 @@
 {
   "compilerOptions": {
-    "target": "ES2020",                           // Good for Node.js 14+
-    "module": "CommonJS",                         // Required for Node.js
-    "rootDir": "./src",                           // TS input directory
-    "outDir": "dist",                             // Output directory
-    "strict": true,                               // All strict checks
-    "esModuleInterop": true,                      // Required for default imports
-    "forceConsistentCasingInFileNames": true,     // Prevent casing issues
-    "skipLibCheck": true,                         // Skip type checking node_modules
-    "moduleResolution": "node",                   // Recommended for modern Node
-    "resolveJsonModule": true,                    // If you import JSON (common)
-    "incremental": true,                          // 💡 Enables faster builds (important)
-    "tsBuildInfoFile": "./.tsbuildinfo"           // Stores incremental cache
+    "target": "ES2020",
+    "module": "CommonJS",
+    "rootDir": "./",  // Set the root to the project root directory
+    "outDir": "dist", // Output directory
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "incremental": true,
+    "tsBuildInfoFile": "./.tsbuildinfo",
+    "typeRoots": ["@types", "node_modules/@types"],
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist", "build", ".tsbuildinfo"]
+  "include": [
+    "src",         // Include all files inside src
+    "index.ts"     // Include index.ts outside of src
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    ".tsbuildinfo"
+  ]
 }
